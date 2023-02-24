@@ -49,7 +49,7 @@ async def go_handler(message: Message):
     if ticket_id:
         selected_data = f"ticket/bilet{ticket_id}.json"
     else:
-        ticket_id = random.randint(1, 5)
+        ticket_id = random.randint(5, 5)
         selected_data = f"ticket/bilet{ticket_id}.json"
         db.set_selected_ticket(message.from_user.id, ticket_id)
     async with aiofiles.open(selected_data, "r", encoding="utf-8") as file:
