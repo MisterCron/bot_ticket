@@ -89,12 +89,16 @@ async def go_handler(message: Message):
         document.add_paragraph(questions[q]["text"])
         if is_correct==True:
             p = document.add_paragraph()
-            p.add_run("Ответ пользователя: Верно").bold=True
-            p.add_run('\n')
+            p.add_run('Ответ пользователя: ').bold=True
+            p.add_run((str(data["answer"]++1))).bold=True
+            p.add_run(' - верно').bold=True
+            document.add_paragraph('\n')
         else: 
             p = document.add_paragraph()
-            p.add_run("Ответ пользователя: Не верно",).bold=True
-            p.add_run('\n')
+            p.add_run('Ответ пользователя: ').bold=True
+            p.add_run((str(data["answer"]++1))).bold=True
+            p.add_run(' - не верно').bold=True
+            document.add_paragraph('\n')
         document.save(namedocument)
         passed = db.get_questions_passed(callback.from_user.id)
         msg = db.get_questions_message(callback.from_user.id)
