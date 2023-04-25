@@ -24,7 +24,7 @@ def reset(uid: int):
     db.change_questions_message(uid, 0)
     db.change_current_question(uid, 0)
 
-
+document = None
 bot = Bot(token=config.TOKEN)
 dp = Dispatcher(bot=bot)
 
@@ -41,7 +41,7 @@ async def go_handler(message: Message):
         )
         return
 
-
+    global document
     document = docx.Document()
 
 
@@ -72,6 +72,7 @@ async def go_handler(message: Message):
 
     @dp.callback_query_handler(lambda c: True)
     async def answer_handler(callback: CallbackQuery):
+        global document
         ticket_id = db.get_selected_ticket(message.from_user.id)
         if ticket_id:
             selected_data = f"ticket/bilet{ticket_id}.json"
@@ -121,6 +122,7 @@ async def go_handler(message: Message):
                 doc.save(namedocument)
                 await bot.send_document(callback.from_user.id,document=open(namedocument,'rb'))
                 os.remove(namedocument)
+                document = docx.Document()
             if passed >= 8:
                 reset(callback.from_user.id)
                 await bot.delete_message(callback.from_user.id, msg)
